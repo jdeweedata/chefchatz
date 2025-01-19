@@ -9,29 +9,29 @@ import type { Recipe } from '@/types/recipe'
 
 interface CookingGuidanceProps {
   recipe: Recipe
-  onComplete: () => void
-  onExit: () => void
+  onCompleteAction: () => void
+  onExitAction: () => void
 }
 
 interface StepTimerProps {
   timeInSeconds: number
-  onComplete: () => void
+  onCompleteAction: () => void
 }
 
 interface StepInstructionProps {
   instruction: string
   stepNumber: number
   isCompleted: boolean
-  onToggleComplete: () => void
+  onToggleCompleteAction: () => void
   timer?: number
 }
 
 interface NavigationBarProps {
   currentStep: number
   totalSteps: number
-  onPrevious: () => void
-  onNext: () => void
-  onExit: () => void
+  onPreviousAction: () => void
+  onNextAction: () => void
+  onExitAction: () => void
   progress: number
 }
 
@@ -39,13 +39,13 @@ interface Instruction {
   description: string
 }
 
-function StepTimer({ timeInSeconds, onComplete }: StepTimerProps) {
+function StepTimer({ timeInSeconds, onCompleteAction }: StepTimerProps) {
   const [timeLeft, setTimeLeft] = useState(timeInSeconds)
   const { toast } = useToast()
 
   useEffect(() => {
     if (timeLeft <= 0) {
-      onComplete()
+      onCompleteAction()
       return
     }
 
@@ -54,7 +54,7 @@ function StepTimer({ timeInSeconds, onComplete }: StepTimerProps) {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [timeLeft, onComplete])
+  }, [timeLeft, onCompleteAction])
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60)
@@ -70,7 +70,7 @@ function StepTimer({ timeInSeconds, onComplete }: StepTimerProps) {
   )
 }
 
-function StepInstruction({ instruction, stepNumber, isCompleted, onToggleComplete, timer }: StepInstructionProps) {
+function StepInstruction({ instruction, stepNumber, isCompleted, onToggleCompleteAction, timer }: StepInstructionProps) {
   return (
     <div className="rounded-lg border p-6">
       <p className="text-lg">{instruction}</p>
@@ -78,14 +78,14 @@ function StepInstruction({ instruction, stepNumber, isCompleted, onToggleComplet
       {timer && (
         <StepTimer 
           timeInSeconds={timer} 
-          onComplete={() => {}} 
+          onCompleteAction={() => {}} 
         />
       )}
 
       <Button
         variant="outline"
         className="mt-4 w-full"
-        onClick={onToggleComplete}
+        onClick={onToggleCompleteAction}
       >
         {isCompleted ? (
           <>
@@ -100,10 +100,10 @@ function StepInstruction({ instruction, stepNumber, isCompleted, onToggleComplet
   )
 }
 
-function NavigationBar({ currentStep, totalSteps, onPrevious, onNext, onExit, progress }: NavigationBarProps) {
+function NavigationBar({ currentStep, totalSteps, onPreviousAction, onNextAction, onExitAction, progress }: NavigationBarProps) {
   return (
     <div className="flex items-center justify-between">
-      <Button variant="ghost" size="sm" onClick={onExit}>
+      <Button variant="ghost" size="sm" onClick={onExitAction}>
         <ChevronLeft className="mr-2 h-4 w-4" />
         Exit
       </Button>
@@ -111,13 +111,13 @@ function NavigationBar({ currentStep, totalSteps, onPrevious, onNext, onExit, pr
       <div className="flex gap-2">
         <Button
           variant="outline"
-          onClick={onPrevious}
+          onClick={onPreviousAction}
           disabled={currentStep === 0}
         >
           <ChevronLeft className="mr-2 h-4 w-4" />
           Previous
         </Button>
-        <Button onClick={onNext}>
+        <Button onClick={onNextAction}>
           {currentStep === totalSteps - 1 ? (
             'Finish'
           ) : (
@@ -132,7 +132,7 @@ function NavigationBar({ currentStep, totalSteps, onPrevious, onNext, onExit, pr
   )
 }
 
-export function CookingGuidance({ recipe, onComplete, onExit }: CookingGuidanceProps) {
+export function CookingGuidance({ recipe, onCompleteAction, onExitAction }: CookingGuidanceProps) {
   const { toast } = useToast()
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
@@ -162,7 +162,7 @@ export function CookingGuidance({ recipe, onComplete, onExit }: CookingGuidanceP
       title: 'Recipe Complete!',
       description: 'Great job! Your dish is ready.',
     })
-    onComplete()
+    onCompleteAction()
   }
 
   const toggleStepCompletion = (stepIndex: number) => {
@@ -180,9 +180,9 @@ export function CookingGuidance({ recipe, onComplete, onExit }: CookingGuidanceP
       <NavigationBar
         currentStep={currentStep}
         totalSteps={recipe.instructions.length}
-        onPrevious={handlePrevious}
-        onNext={handleNext}
-        onExit={onExit}
+        onPreviousAction={handlePrevious}
+        onNextAction={handleNext}
+        onExitAction={onExitAction}
         progress={progress}
       />
 
@@ -197,7 +197,7 @@ export function CookingGuidance({ recipe, onComplete, onExit }: CookingGuidanceP
         instruction={recipe.instructions[currentStep]}
         stepNumber={currentStep + 1}
         isCompleted={completedSteps.includes(currentStep)}
-        onToggleComplete={() => toggleStepCompletion(currentStep)}
+        onToggleCompleteAction={() => toggleStepCompletion(currentStep)}
         timer={extractTimeFromInstruction(recipe.instructions[currentStep])}
       />
     </div>
