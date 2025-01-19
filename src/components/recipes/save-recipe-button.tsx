@@ -50,8 +50,8 @@ function parseRecipeText(recipeText: string): Partial<RecipeInput> {
     ingredients,
     instructions,
     servings,
-    prep_time: 30,
-    cook_time: 30,
+    prepTime: 30,
+    cookTime: 30,
     difficulty: 'medium',
     cuisine: 'International',
     tags: [],
@@ -62,7 +62,7 @@ async function saveRecipeToDatabase(userId: string, recipeData: Partial<RecipeIn
   const { error } = await supabase
     .from('recipes')
     .insert({
-      user_id: userId,
+      userId: userId,
       ...recipeData,
     })
 
@@ -73,7 +73,7 @@ async function saveRecipeToDatabase(userId: string, recipeData: Partial<RecipeIn
 
 export function SaveRecipeButton({ recipe, onSave }: SaveRecipeButtonProps) {
   const [isSaving, setIsSaving] = useState(false)
-  const [isSaved, setIsSaved] = useState(recipe.is_favorite || false)
+  const [isSaved, setIsSaved] = useState(recipe.isFavorite || false)
   const { user } = useAuth()
   const { toast } = useToast()
   const router = useRouter()
@@ -113,9 +113,9 @@ export function SaveRecipeButton({ recipe, onSave }: SaveRecipeButtonProps) {
       const { error } = await supabase
         .from('favorites')
         .upsert({
-          user_id: user.id,
-          recipe_id: recipe.id,
-          created_at: new Date().toISOString(),
+          userId: user.id,
+          recipeId: recipe.id,
+          createdAt: new Date().toISOString(),
         })
 
       if (error) throw error
