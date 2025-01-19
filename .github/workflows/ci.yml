@@ -11,6 +11,11 @@ env:
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  NEXT_PUBLIC_GITHUB_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GITHUB_CLIENT_ID }}
+  GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+  NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
 
 jobs:
   build-and-test:
@@ -23,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -50,13 +54,13 @@ jobs:
       - name: Run type check
         run: pnpm tsc --noEmit
 
-      - name: Run ESLint
+      - name: Run lint
         run: pnpm lint
 
       - name: Run tests
         run: pnpm test
 
-      - name: Build application
+      - name: Build
         run: pnpm build
 
   deploy:
