@@ -6,19 +6,20 @@ import { RecipeCard } from '../recipe-card'
 describe('RecipeCard', () => {
   const mockRecipe = {
     id: '123',
-    user_id: 'user123',
+    userId: 'user123',
     title: 'Test Recipe',
     description: 'A test recipe',
     ingredients: ['ingredient 1'],
     instructions: ['Step 1', 'Step 2'],
     servings: 4,
-    prep_time: 15,
-    cook_time: 15,
+    prepTime: 15,
+    cookTime: 15,
     difficulty: 'medium' as const,
     cuisine: 'Test',
     tags: ['test'],
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01'
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
+    isFavorite: false
   }
 
   it('displays recipe information', () => {
