@@ -4,10 +4,59 @@ import { cn } from '@/lib/utils'
 import { Message } from '@/types/chat'
 import { UserCircle } from 'lucide-react'
 import { SaveRecipeButton } from '@/components/recipes/save-recipe-button'
+import { Recipe } from '@/types/recipe'
 
 interface MessageBubbleProps {
   message: Message
   isLoading?: boolean
+}
+
+function parseRecipeFromContent(content: string): Recipe {
+  // Extract title from "Recipe: [Recipe Name]"
+  const titleMatch = content.match(/Recipe:\s*([^\n]+)/)
+  const title = titleMatch ? titleMatch[1].trim() : 'New Recipe'
+
+  // Extract ingredients between "Ingredients:" and "Instructions:"
+  const ingredientsMatch = content.match(/Ingredients:([\s\S]*?)(?=Instructions:)/)
+  const ingredients = ingredientsMatch
+    ? ingredientsMatch[1]
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.startsWith('-'))
+        .map(line => line.substring(1).trim())
+    : []
+
+  // Extract instructions between "Instructions:" and "Tips:" (if present)
+  const instructionsMatch = content.match(/Instructions:([\s\S]*?)(?=Tips:|$)/)
+  const instructions = instructionsMatch
+    ? instructionsMatch[1]
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => /^\d+\./.test(line))
+        .map(line => line.replace(/^\d+\.\s*/, ''))
+    : []
+
+  // Extract servings from "Servings: [Number]"
+  const servingsMatch = content.match(/Servings:\s*(\d+)/)
+  const servings = servingsMatch ? parseInt(servingsMatch[1], 10) : 4
+
+  return {
+    id: '', // Will be set by the database
+    userId: '', // Will be set by the database
+    title,
+    description: content,
+    ingredients,
+    instructions,
+    servings,
+    prepTime: 30,
+    cookTime: 30,
+    difficulty: 'medium',
+    cuisine: 'International',
+    tags: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    isFavorite: false
+  }
 }
 
 export function MessageBubble({ message, isLoading }: MessageBubbleProps) {
@@ -62,7 +111,7 @@ export function MessageBubble({ message, isLoading }: MessageBubbleProps) {
             <div className="whitespace-pre-wrap">{content}</div>
             {hasRecipe && (
               <SaveRecipeButton 
-                recipe={content} 
+                recipe={parseRecipeFromContent(content)} 
               />
             )}
           </>
