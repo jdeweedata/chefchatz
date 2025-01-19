@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "sequence": {
+    "order": [
+      "docs/1-initial-prompt.md",
+      "docs/2-page-routes.md",
+      "docs/3-auth.md",
+      "docs/4-userflow.md"
+    ],
+    "enforce": "strict"
+  },
+  "standards": {
+    "file_size_limit": 300,
+    "function_size_limit": 30,
+    "load_time_limit": 3000
+  },
+  "quality_gates": {
+    "before_commit": [
+      "test_implementation",
+      "verify_integration",
+      "check_performance",
+      "update_documentation",
+      "log_completion"
+    ]
+  },
+  "performance": {
+    "optimize_memory": true,
+    "minimize_network_calls": true
+  },
+  "documentation": {
+    "required_sections": [
+      "implementation_steps",
+      "error_messages",
+      "version_info",
+      "compatibility_notes",
+      "performance_metrics"
+    ]
+  },
+  "branch_rules": {
+    "main_branches": [
+      "main",
+      "setup/initial-config",
+      "feature/page-routes",
+      "feature/auth-system",
+      "feature/user-flows"
+    ],
+    "naming_convention": "^(feature|fix|docs|style|refactor|test)/[a-z0-9-]+$"
+  },
+  "commit_rules": {
+    "conventional_commits": true,
+    "types": [
+      "feat",
+      "fix",
+      "docs",
+      "style",
+      "refactor",
+      "test"
+    ]
+  }
+}
