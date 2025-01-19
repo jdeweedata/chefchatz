@@ -1,51 +1,54 @@
+import { describe, it, expect, vi } from 'vitest'
 import { generateRecipe, RecipeGenerationParams } from '../openai'
 
 // Mock OpenAI
-jest.mock('openai', () => {
-  return jest.fn().mockImplementation(() => ({
-    chat: {
-      completions: {
-        create: jest.fn().mockResolvedValue({
-          choices: [
-            {
-              message: {
-                content: JSON.stringify({
-                  title: 'Test Recipe',
-                  servings: '4',
-                  prepTime: '30',
-                  cookTime: '45',
-                  difficulty: 'medium',
-                  ingredients: [
-                    {
-                      item: 'test ingredient',
-                      amount: '1',
-                      unit: 'cup',
+vi.mock('openai', () => {
+  return {
+    default: vi.fn().mockImplementation(() => ({
+      chat: {
+        completions: {
+          create: vi.fn().mockResolvedValue({
+            choices: [
+              {
+                message: {
+                  content: JSON.stringify({
+                    title: 'Test Recipe',
+                    servings: '4',
+                    prepTime: '30',
+                    cookTime: '45',
+                    difficulty: 'medium',
+                    ingredients: [
+                      {
+                        item: 'test ingredient',
+                        amount: '1',
+                        unit: 'cup',
+                      },
+                    ],
+                    instructions: [
+                      {
+                        step: 1,
+                        description: 'Test instruction',
+                      },
+                    ],
+                    nutritionalInfo: {
+                      calories: '300',
+                      protein: '10g',
+                      carbs: '30g',
+                      fat: '15g',
                     },
-                  ],
-                  instructions: [
-                    {
-                      step: 1,
-                      description: 'Test instruction',
-                    },
-                  ],
-                  nutritionalInfo: {
-                    calories: '300',
-                    protein: '20',
-                    carbs: '30',
-                    fat: '10',
-                  },
-                }),
+                  }),
+                },
               },
-            },
-          ],
-        }),
+            ],
+          }),
+        },
       },
-    },
-  }))
+    })),
+  }
 })
 
 describe('OpenAI Recipe Generation', () => {
-  it('should generate a recipe with given parameters', async () => {
+  it('generates a recipe with the given parameters', async () => {
     const params: RecipeGenerationParams = {
       ingredients: ['chicken', 'rice'],
       dietary: ['gluten-free'],
@@ -54,11 +57,32 @@ describe('OpenAI Recipe Generation', () => {
     }
 
     const recipe = await generateRecipe(params)
-    const parsedRecipe = JSON.parse(recipe!)
 
-    expect(parsedRecipe).toHaveProperty('title')
-    expect(parsedRecipe).toHaveProperty('ingredients')
-    expect(parsedRecipe).toHaveProperty('instructions')
-    expect(parsedRecipe).toHaveProperty('nutritionalInfo')
+    expect(recipe).toEqual({
+      title: 'Test Recipe',
+      servings: '4',
+      prepTime: '30',
+      cookTime: '45',
+      difficulty: 'medium',
+      ingredients: [
+        {
+          item: 'test ingredient',
+          amount: '1',
+          unit: 'cup',
+        },
+      ],
+      instructions: [
+        {
+          step: 1,
+          description: 'Test instruction',
+        },
+      ],
+      nutritionalInfo: {
+        calories: '300',
+        protein: '10g',
+        carbs: '30g',
+        fat: '15g',
+      },
+    })
   })
 })
