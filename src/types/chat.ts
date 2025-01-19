@@ -1,19 +1,18 @@
-export interface Message {
+export type Message = {
   role: 'user' | 'assistant'
   content: string
 }
 
-export interface ChatResponse {
-  response: string
-  error?: string
+export type ChatType = 'recipe' | 'guidance'
+
+export interface RecipeMessage {
+  type: 'recipe'
+  message: string
 }
 
-export interface ChatRequest {
-  type: 'recipe' | 'guidance'
-  params: {
-    query?: string
-    recipe?: string
-    currentStep?: number
-    question?: string
-  }
+export interface GuidanceMessage {
+  type: 'guidance'
+  recipe: string
+  currentStep: number
+  question: string
 }

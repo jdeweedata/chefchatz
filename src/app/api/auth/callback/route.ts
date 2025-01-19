@@ -5,17 +5,12 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
-  const next = requestUrl.searchParams.get('next') || '/dashboard'
+  const cookieStore = cookies()
 
   if (code) {
-    const supabase = createRouteHandlerClient({ cookies })
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-
-    if (!error) {
-      return NextResponse.redirect(new URL(next, requestUrl))
-    }
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+    await supabase.auth.exchangeCodeForSession(code)
   }
 
-  // Return the user to an error page with some instructions
-  return NextResponse.redirect(new URL('/auth/auth-code-error', requestUrl))
+  return NextResponse.redirect(new URL('/dashboard', request.url))
 }

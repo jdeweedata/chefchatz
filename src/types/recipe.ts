@@ -1,32 +1,32 @@
 export interface Recipe {
   id: string
-  userId: string
+  user_id: string
   title: string
   description: string
   ingredients: string[]
   instructions: string[]
   servings: number
-  prepTime: number
-  cookTime: number
+  prep_time: number
+  cook_time: number
   difficulty: 'easy' | 'medium' | 'hard'
   cuisine: string
   tags: string[]
-  imageUrl?: string
-  createdAt: string
-  updatedAt: string
-  isFavorite: boolean
+  image_url?: string
+  created_at: string
+  updated_at: string
+  is_favorite?: boolean
 }
 
-export interface SaveRecipeParams {
+export interface RecipeInput {
   title: string
   description: string
   ingredients: string[]
   instructions: string[]
   servings: number
-  prepTime: number
-  cookTime: number
-  difficulty: 'easy' | 'medium' | 'hard'
-  cuisine: string
-  tags: string[]
-  imageUrl?: string
+  prep_time?: number
+  cook_time?: number
+  difficulty?: 'easy' | 'medium' | 'hard'
+  cuisine?: string
+  tags?: string[]
+  image_url?: string
 }

@@ -5,7 +5,13 @@
       "docs/1-initial-prompt.md",
       "docs/2-page-routes.md",
       "docs/3-auth.md",
-      "docs/4-userflow.md"
+      "docs/4-userflow.md",
+      "docs/5-api.md",
+      "docs/6-testing.md",
+      "docs/7-deploy.md",
+      "docs/8-state.md",
+      "docs/9-mon.md",
+      "docs/10-db.md"
     ],
     "enforce": "strict"
   },

@@ -1,37 +1,37 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST } from '../route'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 // Mock the dependencies
-jest.mock('@supabase/auth-helpers-nextjs', () => ({
-  createRouteHandlerClient: jest.fn(),
+vi.mock('@supabase/auth-helpers-nextjs', () => ({
+  createRouteHandlerClient: vi.fn(),
 }))
 
-jest.mock('next/headers', () => ({
-  cookies: jest.fn(),
+vi.mock('next/headers', () => ({
+  cookies: vi.fn(),
 }))
 
-jest.mock('@/lib/ai/openai', () => ({
-  generateRecipe: jest.fn(),
+vi.mock('@/lib/ai/openai', () => ({
+  generateRecipe: vi.fn(),
 }))
 
-jest.mock('@/lib/ai/anthropic', () => ({
-  getCookingGuidance: jest.fn(),
+vi.mock('@/lib/ai/anthropic', () => ({
+  getCookingGuidance: vi.fn(),
 }))
 
 describe('Chat API Route', () => {
   let mockSupabase: any
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockSupabase = {
       auth: {
-        getSession: jest.fn(),
+        getSession: vi.fn(),
       },
     }
-    ;(createRouteHandlerClient as jest.Mock).mockReturnValue(mockSupabase)
+    ;(createRouteHandlerClient as vi.Mock).mockReturnValue(mockSupabase)
   })
 
   it('should return 401 if user is not authenticated', async () => {

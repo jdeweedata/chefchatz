@@ -4,6 +4,7 @@ CREATE TABLE recipes (
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT,
+  recipe_text TEXT NOT NULL,
   ingredients TEXT[] NOT NULL,
   instructions TEXT[] NOT NULL,
   servings INTEGER NOT NULL,

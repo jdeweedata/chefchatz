@@ -1,88 +1,99 @@
 import { describe, it, expect, vi } from 'vitest'
-import { generateRecipe, RecipeGenerationParams } from '../openai'
+import { generateRecipe } from '../openai'
 
-// Mock OpenAI
 vi.mock('openai', () => {
   return {
     default: vi.fn().mockImplementation(() => ({
       chat: {
         completions: {
-          create: vi.fn().mockResolvedValue({
+          create: vi.fn().mockImplementation(async () => ({
             choices: [
               {
                 message: {
                   content: JSON.stringify({
                     title: 'Test Recipe',
-                    servings: '4',
-                    prepTime: '30',
-                    cookTime: '45',
+                    description: 'A test recipe',
+                    ingredients: ['ingredient 1'],
+                    instructions: ['Step 1'],
+                    servings: 4,
+                    prep_time: 15,
+                    cook_time: 15,
                     difficulty: 'medium',
-                    ingredients: [
-                      {
-                        item: 'test ingredient',
-                        amount: '1',
-                        unit: 'cup',
-                      },
-                    ],
-                    instructions: [
-                      {
-                        step: 1,
-                        description: 'Test instruction',
-                      },
-                    ],
-                    nutritionalInfo: {
-                      calories: '300',
-                      protein: '10g',
-                      carbs: '30g',
-                      fat: '15g',
-                    },
-                  }),
-                },
-              },
-            ],
-          }),
-        },
-      },
-    })),
+                    cuisine: 'Test',
+                    tags: ['test']
+                  })
+                }
+              }
+            ]
+          }))
+        }
+      }
+    }))
   }
 })
 
 describe('OpenAI Recipe Generation', () => {
+  const mockOpenAI = {
+    chat: {
+      completions: {
+        create: vi.fn()
+      }
+    }
+  }
+
+  beforeEach(() => {
+    mockOpenAI.chat.completions.create.mockReset()
+  })
+
   it('generates a recipe with the given parameters', async () => {
-    const params: RecipeGenerationParams = {
-      ingredients: ['chicken', 'rice'],
-      dietary: ['gluten-free'],
-      cuisine: 'Asian',
+    const mockResponse = {
+      title: 'Test Recipe',
+      description: 'A test recipe',
+      ingredients: ['ingredient 1'],
+      instructions: ['Step 1'],
+      servings: 4,
+      prep_time: 15,
+      cook_time: 15,
       difficulty: 'medium',
+      cuisine: 'Test',
+      tags: ['test']
     }
 
-    const recipe = await generateRecipe(params)
-
-    expect(recipe).toEqual({
-      title: 'Test Recipe',
-      servings: '4',
-      prepTime: '30',
-      cookTime: '45',
-      difficulty: 'medium',
-      ingredients: [
+    mockOpenAI.chat.completions.create.mockResolvedValueOnce({
+      choices: [
         {
-          item: 'test ingredient',
-          amount: '1',
-          unit: 'cup',
-        },
-      ],
-      instructions: [
-        {
-          step: 1,
-          description: 'Test instruction',
-        },
-      ],
-      nutritionalInfo: {
-        calories: '300',
-        protein: '10g',
-        carbs: '30g',
-        fat: '15g',
-      },
+          message: {
+            content: JSON.stringify(mockResponse)
+          }
+        }
+      ]
     })
+
+    const result = await generateRecipe('test recipe')
+    expect(result).toEqual(mockResponse)
+  })
+
+  it('handles invalid JSON response', async () => {
+    mockOpenAI.chat.completions.create.mockResolvedValueOnce({
+      choices: [
+        {
+          message: {
+            content: 'invalid json'
+          }
+        }
+      ]
+    })
+
+    await expect(generateRecipe('test recipe'))
+      .rejects.toThrow('Failed to parse recipe')
+  })
+
+  it('handles API errors gracefully', async () => {
+    mockOpenAI.chat.completions.create.mockRejectedValueOnce(
+      new Error('API Error')
+    )
+
+    await expect(generateRecipe('test recipe'))
+      .rejects.toThrow('Failed to generate recipe')
   })
 })

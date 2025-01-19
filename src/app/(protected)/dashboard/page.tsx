@@ -11,7 +11,9 @@ export const metadata = {
 }
 
 export default async function DashboardPage() {
-  const supabase = createServerComponentClient({ cookies })
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient({ cookies: () => cookieStore })
+  
   const { data: { session } } = await supabase.auth.getSession()
 
   if (!session) {
@@ -24,17 +26,14 @@ export default async function DashboardPage() {
     .select('*')
     .eq('user_id', session.user.id)
     .order('created_at', { ascending: false })
-    .limit(10)
 
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Dashboard"
-        text="View and manage your recipes and cooking sessions."
+        heading="My Recipes"
+        text="Create and manage your recipes."
       />
-      <div className="grid gap-8">
-        <RecipeList recipes={recipes || []} />
-      </div>
+      <RecipeList recipes={recipes || []} />
     </DashboardShell>
   )
 }

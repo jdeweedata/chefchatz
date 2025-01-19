@@ -6,6 +6,11 @@ This documentation establishes the guidelines and sequence for generating code a
 - 2-page-routes.md
 - 3-auth.md
 - 4-userflow.md
+- 5-api.md
+- 6-testing.md
+- 7-deploy.md
+- 8-state.md
+- 9-mon.md
 
 You are responsible for maintaining consistency and proper structure throughout the implementation of each phase.
 
@@ -44,6 +49,46 @@ You are responsible for maintaining consistency and proper structure throughout 
 - Create cooking guidance system
 - Document user interactions
 - Log completion status
+
+### 5. 5-api.md
+- BEGIN ONLY after 4-userflow.md completion
+- Document all API endpoints
+- Define request/response formats
+- Specify authentication requirements
+- Document rate limiting
+- Set up versioning strategy
+
+### 6. 6-testing.md
+- BEGIN ONLY after 5-api.md completion
+- Set up testing infrastructure
+- Implement unit tests
+- Create integration tests
+- Configure E2E testing
+- Document test coverage requirements
+
+### 7. 7-deploy.md
+- BEGIN ONLY after 6-testing.md completion
+- Configure deployment environments
+- Set up CI/CD pipeline
+- Document rollback procedures
+- Implement backup strategy
+- Configure disaster recovery
+
+### 8. 8-state.md
+- BEGIN ONLY after 7-deploy.md completion
+- Implement state management
+- Configure caching strategy
+- Set up real-time updates
+- Document offline support
+- Optimize performance
+
+### 9. 9-mon.md
+- BEGIN ONLY after 8-state.md completion
+- Set up monitoring stack
+- Configure analytics
+- Implement logging
+- Set up alerting
+- Create dashboards
 
 ## Important Notice
 CAUTION: Avoid operation errors by following sequential order strictly. Each step must be fully completed and verified before proceeding to the next phase.
