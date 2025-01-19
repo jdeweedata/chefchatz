@@ -92,11 +92,12 @@ function parseRecipe(recipeText: string): Recipe {
 
 export async function POST(request: Request) {
   try {
-    // Create server-side Supabase client
-    const supabase = createClient()
+    const recipe = await request.json()
 
+    // Get supabase client
+    const supabaseClient = await createClient()
+    
     // Get session data
-    const supabaseClient = await supabase
     const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession()
     if (sessionError) {
       console.error('Session error:', sessionError)
@@ -113,29 +114,11 @@ export async function POST(request: Request) {
       })
     }
 
-    // Parse request body
-    const body = await request.json()
-    if (!body.recipe) {
-      return NextResponse.json({ 
-        error: 'Recipe text is required' 
-      }, { status: 400 })
-    }
-
     try {
-      // Parse and validate recipe
-      const parsedRecipe = parseRecipe(body.recipe)
-      console.log('Attempting to save recipe:', {
-        userId: session.user.id,
-        title: parsedRecipe.title,
-        ingredients: parsedRecipe.ingredients.length,
-        instructions: parsedRecipe.instructions.length
-      })
-
-      // Insert recipe into database
       const { data, error } = await supabaseClient
         .from('recipes')
         .insert({
-          ...parsedRecipe,
+          ...recipe,
           user_id: session.user.id
         })
         .select()
@@ -144,16 +127,18 @@ export async function POST(request: Request) {
       if (error) throw error
 
       return NextResponse.json(data)
-    } catch (parseError) {
-      console.error('Recipe parsing error:', parseError)
+    } catch (error) {
+      console.error('Error saving recipe:', error)
       return NextResponse.json({ 
-        error: parseError instanceof Error ? parseError.message : 'Failed to parse recipe'
-      }, { status: 400 })
+        error: 'Failed to save recipe',
+        status: 500
+      })
     }
   } catch (error) {
-    console.error('Server error:', error)
+    console.error('Error parsing request:', error)
     return NextResponse.json({ 
-      error: error instanceof Error ? error.message : 'Internal server error'
-    }, { status: 500 })
+      error: 'Invalid request body',
+      status: 400
+    })
   }
 }
