@@ -38,7 +38,7 @@ const RecipeCard = memo(function RecipeCard({ recipe }: { recipe: Recipe }) {
         <div className="p-6">
           <h3 className="font-semibold">{recipe.title}</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Created {formatDistanceToNow(new Date(recipe.created_at), { addSuffix: true })}
+            Created {formatDistanceToNow(new Date(recipe.createdAt), { addSuffix: true })}
           </p>
           <div className="mt-4">
             <p className="text-sm text-muted-foreground">
