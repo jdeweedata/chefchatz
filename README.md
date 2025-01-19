@@ -4,11 +4,12 @@ An AI-powered cooking assistant that helps you discover, save, and perfect recip
 
 ## Features
 
-- AI-powered recipe generation
-- Step-by-step cooking guidance
-- Personal recipe storage
-- Smart recipe search
-- Mobile-friendly interface
+- 🤖 AI-powered recipe generation
+- 👩‍🍳 Step-by-step cooking guidance
+- 💾 Personal recipe storage
+- 🔍 Smart recipe search
+- 📱 Mobile-friendly interface
+- 🚀 CI/CD enabled with GitHub Actions and Vercel
 
 ## Tech Stack
 
@@ -78,6 +79,22 @@ pnpm test:coverage
    - `test:` for adding tests
 
 3. Create a pull request to the `main` branch
+
+## CI/CD Pipeline
+
+The project uses GitHub Actions for CI/CD:
+
+1. **Continuous Integration**:
+   - Runs on every push and pull request
+   - Type checking with TypeScript
+   - Linting with ESLint
+   - Unit tests with Jest
+   - E2E tests with Cypress
+
+2. **Continuous Deployment**:
+   - Automatic deployment to Vercel
+   - Preview deployments for pull requests
+   - Production deployment on merge to main
 
 ## License
 
