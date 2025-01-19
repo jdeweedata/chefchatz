@@ -96,18 +96,21 @@ export async function POST(request: Request) {
     const supabase = createClient()
 
     // Get session data
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    const supabaseClient = await supabase
+    const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession()
     if (sessionError) {
       console.error('Session error:', sessionError)
       return NextResponse.json({ 
-        error: 'Authentication error: ' + sessionError.message 
-      }, { status: 401 })
+        error: 'Unauthorized',
+        status: 401
+      })
     }
 
     if (!session) {
       return NextResponse.json({ 
-        error: 'Please sign in to save recipes' 
-      }, { status: 401 })
+        error: 'Unauthorized',
+        status: 401
+      })
     }
 
     // Parse request body
@@ -129,34 +132,18 @@ export async function POST(request: Request) {
       })
 
       // Insert recipe into database
-      const { data: savedRecipe, error: dbError } = await supabase
+      const { data, error } = await supabaseClient
         .from('recipes')
         .insert({
-          user_id: session.user.id,
-          ...parsedRecipe
+          ...parsedRecipe,
+          user_id: session.user.id
         })
-        .select('*')
+        .select()
         .single()
 
-      if (dbError) {
-        console.error('Database error:', {
-          code: dbError.code,
-          message: dbError.message,
-          details: dbError.details,
-          hint: dbError.hint
-        })
-        return NextResponse.json({ 
-          error: `Database error: ${dbError.message}` 
-        }, { status: 500 })
-      }
+      if (error) throw error
 
-      if (!savedRecipe) {
-        return NextResponse.json({ 
-          error: 'Recipe was saved but no data was returned' 
-        }, { status: 500 })
-      }
-
-      return NextResponse.json(savedRecipe)
+      return NextResponse.json(data)
     } catch (parseError) {
       console.error('Recipe parsing error:', parseError)
       return NextResponse.json({ 
