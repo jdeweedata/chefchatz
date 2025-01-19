@@ -12,10 +12,10 @@ import type { Recipe } from '@/types/recipe'
 
 interface RecipeDetailsProps {
   recipe: Recipe
-  onStartCooking: () => void
+  onStartCookingAction: () => void
 }
 
-export function RecipeDetails({ recipe, onStartCooking }: RecipeDetailsProps) {
+export function RecipeDetails({ recipe, onStartCookingAction }: RecipeDetailsProps) {
   const [showFeedback, setShowFeedback] = useState(false)
   const { mutate: submitFeedback, isPending } = useRecipeFeedback(recipe)
 
@@ -88,7 +88,7 @@ export function RecipeDetails({ recipe, onStartCooking }: RecipeDetailsProps) {
         </section>
 
         <div className="flex gap-4">
-          <Button onClick={onStartCooking} size="lg">
+          <Button onClick={onStartCookingAction} size="lg">
             Start Cooking
             <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
