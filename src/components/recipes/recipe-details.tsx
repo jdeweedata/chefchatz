@@ -17,7 +17,7 @@ interface RecipeDetailsProps {
 
 export function RecipeDetails({ recipe, onStartCooking }: RecipeDetailsProps) {
   const [showFeedback, setShowFeedback] = useState(false)
-  const { mutate: submitFeedback } = useRecipeFeedback(recipe)
+  const { mutate: submitFeedback, isPending } = useRecipeFeedback(recipe)
 
   return (
     <div className="space-y-8">
@@ -96,6 +96,7 @@ export function RecipeDetails({ recipe, onStartCooking }: RecipeDetailsProps) {
             variant="outline"
             size="lg"
             onClick={() => setShowFeedback(!showFeedback)}
+            disabled={isPending}
           >
             {showFeedback ? 'Hide Feedback' : 'Leave Feedback'}
           </Button>
