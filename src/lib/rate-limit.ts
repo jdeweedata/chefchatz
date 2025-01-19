@@ -15,7 +15,10 @@ export default function rateLimit(options?: Options) {
 
   return {
     check: (req: NextRequest, limit?: number) => {
-      const token = req.ip || 'anonymous'
+      const ip = req.headers.get('x-forwarded-for') || 
+                 req.headers.get('x-real-ip') || 
+                 'anonymous';
+      const token = ip.split(',')[0].trim();
       const tokenCount = (tokenCache.get(token) as number[]) || [0]
       const [currentUsage, timestamp] = tokenCount
       const now = Date.now()
