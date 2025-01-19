@@ -35,7 +35,24 @@ export async function signUp(formData: FormData): Promise<AuthResponse> {
     }
   }
 
-  return { data, error: null }
+  // Transform user data to match UserProfile type
+  const userProfile = data.user ? {
+    id: data.user.id,
+    email: data.user.email || '',
+    username: data.user.user_metadata?.username,
+    cooking_level: data.user.user_metadata?.cooking_level,
+    created_at: data.user.created_at,
+    updated_at: data.user.updated_at,
+    avatar_url: data.user.user_metadata?.avatar_url
+  } : undefined
+
+  return { 
+    data: {
+      user: userProfile,
+      session: data.session
+    }, 
+    error: null 
+  }
 }
 
 export async function signIn(formData: FormData): Promise<AuthResponse> {
@@ -60,7 +77,24 @@ export async function signIn(formData: FormData): Promise<AuthResponse> {
     }
   }
 
-  return { data, error: null }
+  // Transform user data to match UserProfile type
+  const userProfile = data.user ? {
+    id: data.user.id,
+    email: data.user.email || '',
+    username: data.user.user_metadata?.username,
+    cooking_level: data.user.user_metadata?.cooking_level,
+    created_at: data.user.created_at,
+    updated_at: data.user.updated_at,
+    avatar_url: data.user.user_metadata?.avatar_url
+  } : undefined
+
+  return { 
+    data: {
+      user: userProfile,
+      session: data.session
+    }, 
+    error: null 
+  }
 }
 
 export async function signOut(): Promise<AuthResponse> {
