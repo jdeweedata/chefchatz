@@ -44,9 +44,9 @@ export function RecipeCard({ recipe, onSave, onStart, priority = false }: Recipe
     <Card className="overflow-hidden">
       <Link href={`/recipes/${recipe.id}`}>
         <div className="relative">
-          {recipe.image_url ? (
+          {recipe.imageUrl ? (
             <BlurImage
-              src={recipe.image_url}
+              src={recipe.imageUrl}
               alt={recipe.title}
             />
           ) : (
@@ -60,7 +60,7 @@ export function RecipeCard({ recipe, onSave, onStart, priority = false }: Recipe
             <div className="mt-2 flex items-center gap-4 text-sm text-white/80">
               <div className="flex items-center gap-1">
                 <Clock className="h-4 w-4" />
-                <span>{recipe.prep_time + recipe.cook_time}m</span>
+                <span>{recipe.prepTime + recipe.cookTime}m</span>
               </div>
               <div className="flex items-center gap-1">
                 <Users className="h-4 w-4" />
