@@ -1,15 +1,47 @@
 import '@testing-library/jest-dom'
+import { vi } from 'vitest'
 
 // Mock Next.js router
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),
     replace: vi.fn(),
-    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn()
   }),
   useSearchParams: () => ({
     get: vi.fn(),
+    getAll: vi.fn(),
+    has: vi.fn(),
+    forEach: vi.fn(),
+    entries: vi.fn(),
+    keys: vi.fn(),
+    values: vi.fn(),
+    toString: vi.fn()
+  })
+}))
+
+// Mock Next.js headers
+vi.mock('next/headers', () => ({
+  cookies: () => ({
+    get: vi.fn(),
+    getAll: vi.fn(),
+    set: vi.fn(),
+    delete: vi.fn()
   }),
+  headers: () => ({
+    get: vi.fn(),
+    has: vi.fn(),
+    entries: vi.fn(),
+    keys: vi.fn(),
+    values: vi.fn(),
+    forEach: vi.fn(),
+    append: vi.fn(),
+    delete: vi.fn(),
+    set: vi.fn()
+  })
 }))
 
 // Mock Supabase client
