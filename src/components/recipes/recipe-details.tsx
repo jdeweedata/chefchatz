@@ -32,7 +32,7 @@ export function RecipeDetails({ recipe, onStartCooking }: RecipeDetailsProps) {
       <div className="flex flex-wrap gap-6">
         <div className="flex items-center gap-2">
           <Clock className="h-5 w-5" />
-          <span>{recipe.prep_time + recipe.cook_time}m</span>
+          <span>{recipe.prepTime + recipe.cookTime}m</span>
         </div>
         <div className="flex items-center gap-2">
           <ChefHat className="h-5 w-5" />
@@ -44,10 +44,10 @@ export function RecipeDetails({ recipe, onStartCooking }: RecipeDetailsProps) {
         </div>
       </div>
 
-      {recipe.image_url && (
+      {recipe.imageUrl && (
         <div className="relative aspect-video overflow-hidden rounded-lg">
           <Image
-            src={recipe.image_url}
+            src={recipe.imageUrl}
             alt={recipe.title}
             fill
             className="object-cover"

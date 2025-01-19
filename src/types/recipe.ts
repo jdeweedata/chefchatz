@@ -1,20 +1,20 @@
 export interface Recipe {
   id: string
-  user_id: string
+  userId: string
   title: string
   description: string
   ingredients: string[]
   instructions: string[]
   servings: number
-  prep_time: number
-  cook_time: number
+  prepTime: number
+  cookTime: number
   difficulty: 'easy' | 'medium' | 'hard'
   cuisine: string
   tags: string[]
-  image_url?: string
-  created_at: string
-  updated_at: string
-  is_favorite?: boolean
+  imageUrl?: string
+  createdAt: string
+  updatedAt: string
+  isFavorite?: boolean
 }
 
 export interface RecipeInput {
@@ -23,10 +23,10 @@ export interface RecipeInput {
   ingredients: string[]
   instructions: string[]
   servings: number
-  prep_time?: number
-  cook_time?: number
+  prepTime?: number
+  cookTime?: number
   difficulty?: 'easy' | 'medium' | 'hard'
   cuisine?: string
   tags?: string[]
-  image_url?: string
+  imageUrl?: string
 }
