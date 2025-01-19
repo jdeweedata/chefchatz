@@ -70,7 +70,11 @@ export class AIService {
           ],
         });
 
-        return message.content[0].text;
+        const content = message.content[0];
+        if ('text' in content) {
+          return content.text;
+        }
+        throw new Error(AI_ERROR_MESSAGES.SERVICE_ERROR);
       } catch (error: any) {
         if (error.status === 429) {
           throw new Error(AI_ERROR_MESSAGES.RATE_LIMIT_EXCEEDED);
