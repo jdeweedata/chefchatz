@@ -1,19 +1,28 @@
 import '@testing-library/jest-dom'
-import { vi, expect, beforeEach, afterEach } from 'vitest'
+import { 
+  expect,
+  beforeEach,
+  afterEach,
+  vi,
+  type TestContext,
+  type Suite,
+  type HookFunction
+} from 'vitest'
 import { loadEnvConfig } from '@next/env'
 
 declare global {
   var expect: typeof expect
-  var vi: typeof vi
-  var beforeEach: typeof beforeEach
-  var afterEach: typeof afterEach
+  var beforeEach: HookFunction
+  var afterEach: HookFunction
+  // Use any for vi to avoid circular reference
+  var vi: any
 }
 
 // Make Vitest globals available
 globalThis.expect = expect
 globalThis.vi = vi
-globalThis.beforeEach = beforeEach
-globalThis.afterEach = afterEach
+globalThis.beforeEach = beforeEach as HookFunction
+globalThis.afterEach = afterEach as HookFunction
 
 // Load environment variables
 loadEnvConfig(process.cwd())
